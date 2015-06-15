@@ -1,7 +1,7 @@
 # events4java
-Events4java is simple reminder sender for SMTP and Exchange endpoints (with EWS API enabled). For SMTP it uses
+Events4java is simple reminder sender for SMTP and Exchange endpoints (with EWS API enabled). For SMTP it uses ICS files in enclosed as attachment. Two possible ways of dispatching are available:
 
-## Synchronous
+## Synchronous call
 
 ```java
 EventMailInfo mailInfo = new EventMailInfo("test@test", "SUBJECT", "EMAILBODY", "FILENAME.ics");
@@ -11,7 +11,7 @@ SMTPEventEndpoint endpoint = new SMTPEventEndpoint(eventData);
 
 endpoint.dispatchEvent();
 ```
-## Asynchronous 
+## Asynchronous call
 
 ```java        
 EventMailInfo mailInfo = new EventMailInfo("test@test", "SUBJECT", "EMAILBODY", "FILENAME.ics");
