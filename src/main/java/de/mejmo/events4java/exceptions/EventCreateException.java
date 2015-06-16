@@ -1,7 +1,7 @@
 package de.mejmo.events4java.exceptions;
 
 /**
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
  */
 public class EventCreateException extends Exception {
     public EventCreateException() {

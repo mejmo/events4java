@@ -28,35 +28,34 @@ import java.util.EnumSet;
 /**
  * EWS Endpoint using EWS API in order to add calendar entry for impersonated user.
  *
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
 */
-public class EWSEventEndpoint implements EventEndpoint {
+public class EWSEventEndpoint extends EventEndpoint {
 
     private ExchangeService service;
 
     /**
      * Main entry, parses data from parameter and inserts calendar entry into remote user's calendar. Using impersonation.
-     * @param data
      * @throws EventCreateException
      */
     @Override
-    public void dispatchEvent(EventData data) throws EventCreateException {
+    public void dispatchEvent() throws EventCreateException {
 
         ExchangeService service = getService();
         Appointment appointment;
-        ExchangeEventData ewsData = (ExchangeEventData)data;
+        ExchangeEventData ewsData = (ExchangeEventData)getData();
 
         try {
             appointment = new Appointment(getService());
 
-            if (data.getDateInfo().getType() == EventDateInfo.EventType.AllDay) {
-                AllDayEvent e = (AllDayEvent)data.getDateInfo();
+            if (getData().getDateInfo().getType() == EventDateInfo.EventType.AllDay) {
+                AllDayEvent e = (AllDayEvent)getData().getDateInfo();
                 appointment.setIsAllDayEvent(true);
                 appointment.setStart(e.getDate().toDate());
             }
 
-            if (data.getDateInfo().getType() == EventDateInfo.EventType.TimeSpecific) {
-                TimeSpecificEvent e = (TimeSpecificEvent)data.getDateInfo();
+            if (getData().getDateInfo().getType() == EventDateInfo.EventType.TimeSpecific) {
+                TimeSpecificEvent e = (TimeSpecificEvent)getData().getDateInfo();
                 appointment.setStart(e.getStart().toDate());
                 appointment.setEnd(e.getEnd().toDate());
             }
@@ -131,6 +130,11 @@ public class EWSEventEndpoint implements EventEndpoint {
         return service;
 
     }
+
+    public EWSEventEndpoint(EventData data) {
+        super(data);
+    }
+
 
 
 }

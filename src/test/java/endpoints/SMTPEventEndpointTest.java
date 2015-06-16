@@ -1,18 +1,19 @@
 package endpoints;
 
 import de.mejmo.events4java.config.E4JConfiguration;
-import de.mejmo.events4java.endpoints.SMTPEventEndpoint;
-import de.mejmo.events4java.events.AllDayEvent;
-import de.mejmo.events4java.events.EventDateInfo;
-import de.mejmo.events4java.events.EventMailInfo;
-import de.mejmo.events4java.events.SMTPEventData;
-import de.mejmo.events4java.exceptions.EventCreateException;
+import de.mejmo.events4java.events.*;
+import net.fortuna.ical4j.data.CalendarBuilder;
+import net.fortuna.ical4j.model.Calendar;
+import org.joda.time.DateTime;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
-* Created by MFO on 09.06.2015.
-*/
+import javax.mail.Message;
+import javax.mail.internet.MimeUtility;
+import java.io.StringReader;
+
+import static org.junit.Assert.assertEquals;
+
 public class SMTPEventEndpointTest {
 
     @BeforeClass
@@ -21,15 +22,56 @@ public class SMTPEventEndpointTest {
     }
 
     @Test
-    public void testCreateCalendar() throws EventCreateException {
+    public void testCreateSpecific() throws Throwable {
 
-        EventMailInfo mailInfo = new EventMailInfo("m.formanko@ots-ag.de", "SUBJECT", "EMAILBODY", "FILENAME.ics");
-        EventDateInfo dateInfo = new AllDayEvent("Christmas", 24, 12, 2015);
+        EventMailInfo mailInfo = new EventMailInfo("test@test", "SUBJECT", "EMAILBODY", "FILENAME.ics");
+        EventDateInfo dateInfo = new TimeSpecificEvent("Christmas", new DateTime(2015, 12, 24, 10, 0), new DateTime(2015, 12, 24, 10, 30));
         SMTPEventData eventData = new SMTPEventData(mailInfo, dateInfo);
-        SMTPEventEndpoint endpoint = new SMTPEventEndpoint();
+        SMTPEventEndpointStub stub = new SMTPEventEndpointStub(eventData);
+        stub.dispatchEvent();
 
-        endpoint.dispatchEvent(eventData);
+        Message message = stub.message;
+
+        assertEquals(MimeUtility.decodeText(message.getAllRecipients()[0].toString()), "test@test");
+        assertEquals(message.getSubject(), "SUBJECT");
+
+        StringReader sin = new StringReader(MailUtils.getAttachment(message));
+        CalendarBuilder builder = new CalendarBuilder();
+        Calendar calendar = builder.build(sin);
+
+        assertEquals(calendar.getComponents().getComponent("VEVENT").getProperty("DTSTART").toString().trim(),
+                "DTSTART:20151224T100000");
+        assertEquals(calendar.getComponents().getComponent("VEVENT").getProperty("DTEND").toString().trim(),
+                "DTEND:20151224T103000");
+        assertEquals(calendar.getComponents().getComponent("VEVENT").getProperty("SUMMARY").toString().trim(),
+                "SUMMARY:Christmas");
 
     }
+
+    @Test
+    public void testCreateAllDay() throws Throwable {
+
+        EventMailInfo mailInfo = new EventMailInfo("test@test", "SUBJECT", "EMAILBODY", "FILENAME.ics");
+        EventDateInfo dateInfo = new AllDayEvent("Christmas", 24, 12, 2015);
+        SMTPEventData eventData = new SMTPEventData(mailInfo, dateInfo);
+        SMTPEventEndpointStub stub = new SMTPEventEndpointStub(eventData);
+        stub.dispatchEvent();
+
+        Message message = stub.message;
+
+        assertEquals(MimeUtility.decodeText(message.getAllRecipients()[0].toString()), "test@test");
+        assertEquals(message.getSubject(), "SUBJECT");
+
+        StringReader sin = new StringReader(MailUtils.getAttachment(message));
+        CalendarBuilder builder = new CalendarBuilder();
+        Calendar calendar = builder.build(sin);
+
+        assertEquals(calendar.getComponents().getComponent("VEVENT").getProperty("DTSTART").toString().trim(),
+                "DTSTART;VALUE=DATE:20151224");
+        assertEquals(calendar.getComponents().getComponent("VEVENT").getProperty("SUMMARY").toString().trim(),
+                "SUMMARY:Christmas");
+
+    }
+
 
 }

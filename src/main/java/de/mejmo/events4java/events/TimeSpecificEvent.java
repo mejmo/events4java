@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Holds start and end date of the event.
  *
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
  */
 public class TimeSpecificEvent extends EventDateInfo {
 

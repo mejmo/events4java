@@ -12,7 +12,7 @@ import java.util.Properties;
  * Simple class (than commons-config) for parsing properties file, Settings can be loaded with
  * file or manually with properties object.
  *
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
  */
 public class E4JConfiguration {
 

@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Event without start or endtime specified
  *
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
  */
 public class AllDayEvent extends EventDateInfo {
 

@@ -15,7 +15,7 @@ import java.util.Calendar;
 /**
  * SMTPEventData class holds all information about mail or calendar entry.
  *
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
 */
 public class SMTPEventData extends EventData {
 

@@ -1,12 +1,23 @@
 package de.mejmo.events4java.events;
 
+import de.mejmo.events4java.endpoints.AsyncHandler;
 import de.mejmo.events4java.exceptions.EventCreateException;
 
 /**
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
  */
-public interface EventEndpoint {
+public abstract class EventEndpoint {
 
-    public void dispatchEvent(EventData data) throws EventCreateException;
+    private EventData data;
+
+    public EventEndpoint(EventData data) {
+        this.data = data;
+    }
+
+    public abstract void dispatchEvent() throws EventCreateException;
+
+    protected EventData getData() {
+        return data;
+    }
 
 }

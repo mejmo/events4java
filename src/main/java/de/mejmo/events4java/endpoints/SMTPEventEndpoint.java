@@ -4,6 +4,7 @@ import de.mejmo.events4java.config.E4JConfiguration;
 import de.mejmo.events4java.events.*;
 import de.mejmo.events4java.exceptions.CalendarCreateException;
 import de.mejmo.events4java.exceptions.EventCreateException;
+import sun.misc.IOUtils;
 
 import javax.activation.DataHandler;
 import javax.mail.*;
@@ -18,31 +19,32 @@ import java.util.Properties;
  * SMTP Endpoint class sends ICS file to the destination email. Uses iCal4j to generate ICS string.
  * Supports SSL/TLS encryption and authentication as well.
  *
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
  */
-public class SMTPEventEndpoint implements EventEndpoint {
-
-
+public class SMTPEventEndpoint extends EventEndpoint {
 
     public enum EncryptionType {
         SSL, TLS, none
     }
     private Session session;
 
+    public SMTPEventEndpoint(EventData data) {
+        super(data);
+    }
+
     /**
      * Generates ICS data in memory and sends them to remote SMTP server
-     * @param data
      * @throws EventCreateException
      */
     @Override
-    public void dispatchEvent(EventData data) throws EventCreateException {
+    public void dispatchEvent() throws EventCreateException {
 
         Message message = new MimeMessage(getSession());
 
         try {
-            byte[] ics = ((SMTPEventData)data).getCalendarBytes();
+            byte[] ics = ((SMTPEventData)getData()).getCalendarBytes();
 
-            EventMailInfo mailInfo = (EventMailInfo)((SMTPEventData) data).getMailInfo();
+            EventMailInfo mailInfo = (EventMailInfo)((SMTPEventData) getData()).getMailInfo();
 
             message.setFrom(new InternetAddress(E4JConfiguration.getString("SMTPFromAddress")));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailInfo.getDestinationEmail()));
@@ -65,11 +67,15 @@ public class SMTPEventEndpoint implements EventEndpoint {
         }
 
         try {
-            Transport.send(message);
+            sendMessage(message);
         } catch (MessagingException e) {
             throw new EventCreateException("MSG_EXC: Exception occured while sending email message", e);
         }
 
+    }
+
+    public void sendMessage(Message message) throws MessagingException {
+        Transport.send(message);
     }
 
     /**

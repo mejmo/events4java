@@ -3,7 +3,7 @@ package de.mejmo.events4java.events;
 /**
  * Basic class holding information about SMTP mail being sent with ICS attachment
  *
- * Author: Martin Formanko 2015
+ * @author: Martin Formanko 2015
  */
 public class EventMailInfo {
 
