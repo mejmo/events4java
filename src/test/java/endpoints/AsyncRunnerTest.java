@@ -26,7 +26,7 @@ public class AsyncRunnerTest {
     @Test
     public void testAsync() throws Throwable {
 
-        EventMailInfo mailInfo = new EventMailInfo("m.formanko@ots-ag.de", "SUBJECT", "EMAILBODY", "FILENAME.ics");
+        EventMailInfo mailInfo = new EventMailInfo("test", "SUBJECT", "EMAILBODY", "FILENAME.ics");
         EventDateInfo dateInfo = new AllDayEvent("Christmas", 24, 12, 2015);
         SMTPEventData eventData = new SMTPEventData(mailInfo, dateInfo);
 
