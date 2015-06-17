@@ -108,4 +108,12 @@ AsyncRunner asyncRunner = new AsyncRunner(new SMTPEventEndpoint(eventData), new 
 asyncRunner.start();
 ```
 
+# Bug reports, feature requests and contact
+
+If you found any bugs, if you have feature requests or any questions, please, either file an issue at GitHub.
+
+# License
+
+event4java is published under the MIT license.
+
 
