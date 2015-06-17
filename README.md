@@ -13,41 +13,8 @@ Properties object.
 
 ### Load settings from file
 
-Library searches for file events4java.properties within class path. This is the sample, how it should look like:
-
-```
-##
-## Events4java Configuration file
-##
-
-## Configuration for SMTP Endpoint
-SMTPUsername=
-SMTPPassword=
-SMTPPort=25
-
-#Email address from which the mail will be sent, if SMTP server allows it
-SMTPFromAddress=
-
-SMTPHostname=
-
-# SSL, TLS, none
-SMTPEncryption=none
-
-# true/false
-SMTPDebugEnabled=
-
-# true/false
-SMTPAuthenticationNeeded=
-
-## Configuration for Exchange Endpoint with EWS (Exchange Web Services) enabled
-ExchangeUsername=
-ExchangePassword=
-# see ExchangeVersion enumeration of EWS API on Microsoft (Exchange2007_SP1, Exchange2010, Exchange2010_SP1, ...)
-ExchangeVersion=
-ExchangeCalendarName=
-# EWS API URL
-ExchangeURL=
-```
+Library searches for file events4java.properties within class path. Have a look at events4java.properties sample file how
+it should look like.
 
 ### Loading from Properties object
 
@@ -76,6 +43,8 @@ EventDateInfo dateInfo = new TimeSpecificEvent("Christmas", new DateTime(2015, 1
 ```
 
 ## How to send ICS file with SMTP
+
+When your EventMailInfo and EventDateInfo are created, you can use synchronous or asynchronous way to send ICS file to the user.
 
 ### Synchronous call
 
